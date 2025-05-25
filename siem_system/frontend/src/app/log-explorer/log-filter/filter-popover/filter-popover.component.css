@@ -1,0 +1,53 @@
+@import "@ng-select/ng-select/themes/default.theme.css";
+
+.filter-popover {
+  width: 300px;
+  background: white;
+  padding: 1rem;
+}
+
+.custom-select .ng-select-container {
+  border-color: #4B49AC;
+  border-radius: 6px;
+  min-height: 38px;
+  background: white;
+}
+
+.custom-select .ng-dropdown-panel {
+  border: 1px solid #4B49AC;
+  box-shadow: 0 0 0 3px rgba(75, 73, 172, 0.1);
+  background: white;
+}
+
+.custom-select .ng-option {
+  background: white;
+  padding: 8px 12px;
+  color: #2A2A2A;
+}
+
+.custom-select .ng-option:hover {
+  background: #4B49AC !important;
+  color: white !important;
+}
+
+.form-control {
+  border-color: #4B49AC;
+  border-radius: 6px;
+  padding: 6px 12px;
+}
+
+.btn-apply-filter {
+  background-color: #4B49AC;
+  border-color: #4B49AC;
+  color: white;
+}
+
+.btn-apply-filter:disabled {
+  background-color: #6362ad;
+  color: white;
+}
+
+.btn-apply-filter:hover {
+  background-color: #2a299f;
+  color: white;
+}

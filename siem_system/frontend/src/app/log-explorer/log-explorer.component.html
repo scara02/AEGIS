@@ -1,0 +1,285 @@
+<div class="container-fluid mx-3 my-2 d-flex align-items-center gap-3 p-0">
+  <div class="measurement-selector">
+    <select class="form-select form-select-sm"
+            [(ngModel)]="selectedMeasurement"
+            (change)="onMeasurementChange()">
+      <option *ngFor="let measurement of measurements" [value]="measurement">
+        {{ measurement }}
+      </option>
+    </select>
+  </div>
+
+  <!-- spacer -->
+  <div class="flex-grow-1"></div>
+
+
+  <div class="d-flex align-items-center gap-2 me-4">
+    <!-- search -->
+    <div class="search-container me-4">
+      <div class="input-group input-group-sm">
+        <input type="text"
+              class="form-control"
+              placeholder="Search..."
+              [(ngModel)]="searchQuery"
+              (input)="onSearchInput()">
+        <button class="btn btn-outline-secondary d-flex align-items-center"
+                type="button"
+                (click)="onSearch()">
+          <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="search-icon-glass" d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3C5.91 3 3 5.91 3 9.5C3 13.09 5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14Z" fill="currentColor"/>
+            <path class="search-icon-arrow" d="M12 10H10V12H12V10Z" fill="currentColor"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- refresh button -->
+    <button class="btn btn-refresh shadow-sm d-flex align-items-center"
+            (click)="fetchLogs()"
+            title="Refresh logs"
+            [disabled]="isRefreshing">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4C7.58 4 4 7.58 4 12C4 16.42 7.58 20 12 20C15.73 20 18.84 17.45 19.73 14H17.65C16.83 16.33 14.61 18 12 18C8.69 18 6 15.31 6 12C6 8.69 8.69 6 12 6C13.66 6 15.14 6.69 16.22 7.78L13 11H20V4L17.65 6.35Z"
+              fill="#4B49AC"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<div class="container-fluid mx-3 my-2 d-flex align-items-center gap-3 p-0">
+
+  <div class="filter-controls flex-shrink-0">
+    <button class="btn btn-filter shadow-sm"
+            (click)="clearAllFilters()"
+            title="Clear filters">
+      <img class="icon-filter" src="/clear_filter.svg">
+    </button>
+
+      <!-- filter popover button -->
+    <button class="btn btn-filter shadow-sm"
+            [ngbPopover]="filterTemplate"
+            placement="bottom"
+            [autoClose]="'outside'"
+            popoverClass="filter-custom"
+            title="Add filter">
+      <img class="icon-filter" src="/filter.svg">
+    </button>
+
+    <ng-template #filterTemplate>
+      <app-filter-popover
+        [selectedMeasurement]="selectedMeasurement"
+        [availableFields]="fields"
+        (filterAdded)="onFilterAdded($event)"
+        (operatorsLoaded)="onOperatorsLoaded($event)">
+      </app-filter-popover>
+    </ng-template>
+  </div>
+
+  <!-- applied filters -->
+  <div class="applied-filters d-flex align-items-center flex-grow-1 gap-2 flex-nowrap overflow-x-auto">
+    <div class="d-flex flex-nowrap gap-2" style="min-width: fit-content;">
+      <!-- fixed time filter -->
+      <div *ngIf="fixedTimeFilter"
+           [ngbTooltip]="getFilterTooltip(fixedTimeFilter)"
+           class="badge filter-badge d-flex align-items-center gap-2 pe-2 flex-shrink-0"
+           style="background: #ecedfc; color: #4B49AC; border-radius: 16px;">
+        <span class="filter-text fw-medium text-truncate">
+          {{ fixedTimeFilter.field }}
+          <span style="color: #6c757d;">{{ getOperatorName(fixedTimeFilter.operator) }}</span>
+          <span class="text-dark">
+            {{ fixedTimeFilter.valueFrom | date:'short' }} - {{ fixedTimeFilter.valueTo | date:'short' }}
+          </span>
+        </span>
+      </div>
+
+      <!-- other filters -->
+      <div *ngFor="let filter of removableFilters; let i = index"
+           [ngbTooltip]="getFilterTooltip(filter)"
+           class="badge filter-badge d-flex align-items-center gap-2 pe-2 flex-shrink-0"
+           style="background: #ecedfc; color: #4B49AC; border-radius: 16px;">
+        <span class="filter-text fw-medium">
+          {{ filter.field }}
+          <span style="color: #6c757d;">{{ getOperatorName(filter.operator) }}</span>
+          <span *ngIf="!isRangeOperator(filter.operator)" class="text-dark">
+            {{ filter.value || formatValue(filter) }}
+          </span>
+          <span *ngIf="isRangeOperator(filter.operator)" class="text-dark">
+            {{ filter.valueFrom }} - {{ filter.valueTo }}
+          </span>
+        </span>
+        <button class="btn-close"
+                (click)="removeFilter(i)"
+                style="font-size: 0.6rem; color: #4B49AC; opacity: 0.7;"></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="time-filter-wrapper me-4">
+    <app-time-filter
+      (timeRangeSelected)="onTimeRangeSelected($event)">
+    </app-time-filter>
+  </div>
+</div>
+
+<div class="container-fluid my-2 d-flex gap-2 p-2">
+  <!-- Log Fields Component -->
+  <div class="container-fluid col-3 fields">
+    <app-log-fields
+      [selectedMeasurement]="selectedMeasurement"
+      [selectedFields]="selectedFields"
+      (selectedFieldsChange)="onFieldsChange($event)"
+      (fieldsLoaded)="onFieldsLoaded($event)">
+    </app-log-fields>
+  </div>
+  <!-- Logs Table -->
+  <div class="container-fluid col-9" style="overflow-x: auto;">
+    <div class="log-table">
+      <table class="table" style="min-width: 600px;">
+        <thead>
+          <tr>
+            <th class="chevron-cell"></th>
+            <th *ngFor="let field of selectedFields"
+                (click)="setSort(field)"
+                class="sort-header">
+              <div class="header-content">
+                <span>{{ field }}</span>
+                <span class="sort-icon">
+                  <!-- unsorted-->
+                  <svg *ngIf="sortField !== field"
+                       width="15"
+                       height="15"
+                       viewBox="0 0 32 32"
+                       fill="#000000"
+                       stroke="#333"
+                       class="sort-icon-unsorted">
+                    <g>
+                      <polyline class="st0" points="25,25 21,29 17,25"/>
+                      <line class="st0" x1="21" y1="29" x2="21" y2="7"/>
+                      <polyline class="st0" points="15,7 11,3 7,7"/>
+                      <line class="st0" x1="11" y1="3" x2="11" y2="25"/>
+                    </g>
+                  </svg>
+
+                  <!-- asc sort -->
+                  <svg *ngIf="sortField === field && sortDirection === 'asc'"
+                       width="15"
+                       height="15"
+                       viewBox="0 0 32 32"
+                       fill="#000000"
+                       stroke="#333"
+                       class="sort-icon-asc">
+                    <g>
+                      <polyline class="st0" points="15,7 11,3 7,7"/>
+                      <line class="st0" x1="11" y1="3" x2="11" y2="25"/>
+                    </g>
+                  </svg>
+
+                  <!-- desc sort -->
+                  <svg *ngIf="sortField === field && sortDirection === 'desc'"
+                       width="15"
+                       height="15"
+                       viewBox="0 0 32 32"
+                       fill="#000000"
+                       stroke="#333"
+                       class="sort-icon-desc">
+                    <g>
+                      <polyline class="st0" points="7,25 11,29 15,25"/>
+                      <line class="st0" x1="11" y1="3" x2="11" y2="25"/>
+                    </g>
+                  </svg>
+                </span>
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngIf="logs.length > 0; else noLogsTemplate">
+            <ng-container *ngFor="let log of logs; let i = index">
+              <!-- Main Row -->
+              <tr (click)="toggleExpanded(i)" class="clickable-row">
+                <td>
+                  <span class="chevron" [class.rotated]="log.isExpanded">❯</span>
+                </td>
+                <td *ngFor="let field of selectedFields">{{ log[field] || 'null' }}</td>
+              </tr>
+
+              <tr *ngIf="log.isExpanded" class="expanded-row">
+                <td [attr.colspan]="selectedFields.length + 1">
+                  <div class="expanded-content">
+                    <div class="nav-tabs-container">
+                      <ul class="nav nav-tabs mb-3">
+                        <li class="nav-item">
+                          <a class="nav-link active" (click)="activeTab = 'table'" [class.active]="activeTab === 'table'">
+                            <i class="icon-table2 mr-1"></i> Table
+                          </a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" (click)="activeTab = 'json'" [class.active]="activeTab === 'json'">
+                            <i class="icon-json mr-1"></i> JSON
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <!-- Table View -->
+                    <div *ngIf="activeTab === 'table'" class="table-view">
+                      <div *ngFor="let key of getLogKeys(log)" class="table-view-item">
+                        <div class="row-field-name">
+                          <span class="text-blue-800">{{ key }}:</span>
+                        </div>
+                        <div class="row-field-data">
+                          {{ log[key] || 'null' }}
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- JSON View -->
+                    <div *ngIf="activeTab === 'json'" class="json-view">
+                      <pre>{{ log | jsonPretty }}</pre>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+          </ng-container>
+
+          <ng-template #noLogsTemplate>
+            <tr class="no-logs-row">
+              <td [attr.colspan]="selectedFields.length + 1" class="text-center">
+                <div class="d-flex flex-column align-items-center justify-content-center p-2">
+                  <span class="text-muted">No logs found...</span>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="custom-paginator">
+      <div class="page-navigation">
+        <div class="page-range-label">Rows per page:</div>
+
+        <select class="mat-select" [(ngModel)]="limit" (change)="onLimitChange(limit)">
+          <option *ngFor="let opt of [10, 20, 50, 100]" [value]="opt">{{ opt }}</option>
+        </select>
+
+        <div class="page-info">{{ (page - 1) * limit + 1 }} – {{ page * limit }} of ?</div>
+
+        <button mat-icon-button
+                class="nav-button"
+                [disabled]="page === 1"
+                (click)="onPageChange(page - 1)">
+          ❮
+        </button>
+
+        <button mat-icon-button
+                class="nav-button"
+                [disabled]="logs.length < limit"
+                (click)="onPageChange(page + 1)">
+          ❯
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

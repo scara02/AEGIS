@@ -1,0 +1,63 @@
+version: '3.8'
+services:
+  backend:
+    build: ./siem_system/backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgres://postgres:1234@postgres:5432/siem_db
+    depends_on:
+      - postgres
+    networks:
+      - siem-network
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: siem_db
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - siem-network
+  frontend:
+    build:
+      context: ./siem_system/frontend
+    ports:
+      - "4200:80"
+    networks:
+      - siem-network
+
+  anomaly-detection:
+    build: ./anomaly-detector
+    ports:
+      - "8001:8001"
+    networks:
+      - siem-network
+    depends_on:
+      - backend
+
+  
+  fluentd:
+    build: ./fluentd
+    ports:
+      - "24224:24224"
+      - "24224:24224/udp"
+      - "5140:5140"
+    volumes:
+      - ./fluentd/fluentd.conf:/fluentd/etc/fluentd.conf
+      - fluentd-logs:/fluentd/log
+    networks:
+      - siem-network
+
+networks:
+  siem-network:
+    driver: bridge
+
+volumes:
+  fluentd-logs:

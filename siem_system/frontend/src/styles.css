@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  background-color: rgba(253, 250, 252, 0.99) !important;
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: 0.8rem;
+}
+
+.filter-custom {
+  max-width: none !important;
+  min-width: 300px;
+  left: 20px !important;
+}
+
+.modal-custom {
+  max-width: 500px !important;
+  width: 100%;
+  margin: 1.75rem auto;
+  max-height: 100px !important;
+}

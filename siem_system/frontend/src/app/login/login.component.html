@@ -1,0 +1,38 @@
+<div class="login-container">
+  <div class="card login-card">
+    <div class="text-center p-1">
+      <img src="logo.svg" alt="logo" class="logo" />
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-group username">
+        <label for="username">Username</label>
+        <input
+          type="text"
+          class="form-control"
+          id="username"
+          formControlName="username"
+          placeholder="Enter username" />
+      </div>
+
+      <div class="form-group password">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          class="form-control"
+          id="password"
+          formControlName="password"
+          placeholder="Enter password" />
+      </div>
+
+      <button type="submit" class="btn btn-pink btn-block" [disabled]="loading || loginForm.invalid">
+        <span *ngIf="!loading">Sign In</span>
+        <span *ngIf="loading">Loading...</span>
+      </button>
+
+      <div *ngIf="errorMessage" class="text-center text-danger mt-2">
+        {{ errorMessage }}
+      </div>
+    </form>
+  </div>
+</div>

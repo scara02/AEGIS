@@ -1,0 +1,123 @@
+@import "@ng-select/ng-select/themes/default.theme.css";
+
+.user-form-popover {
+  width: 400px;
+  background: white;
+  padding: 1rem;
+  border: 1px solid #4B49AC;
+  box-shadow: 0 0 0 3px rgba(75, 73, 172, 0.1);
+  border-radius: 6px;
+  font-size: 0.8rem;
+}
+
+.custom-select .ng-select-container {
+  border-color: #4B49AC;
+  border-radius: 6px;
+  min-height: 38px;
+  background: white;
+}
+
+.form-control {
+  border-color: #4B49AC;
+  border-radius: 6px;
+  padding: 6px 12px;
+}
+
+.form-input {
+  border-radius: 15px;
+  border: 1px solid #9ca2a4;
+  padding: 0.5rem 1rem;
+  transition: all 0.3s ease;
+  font-size: 0.8rem;
+  color: #2A2A2A;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-input:focus {
+  border-color: #4B49AC;
+  box-shadow: 0 0 0 0.2rem rgba(75, 73, 172, 0.25);
+}
+
+.form-input.is-invalid {
+  border-color: #dc3545;
+}
+
+.invalid-feedback {
+  color: #dc3545;
+  font-size: 0.69rem;
+  margin-top: 0.25rem;
+}
+
+.optional-text {
+  font-size: 0.7rem;
+  color: #6c757d;
+}
+
+/* select */
+.custom-select .ng-dropdown-panel {
+  border: 1px solid #4B49AC;
+  box-shadow: 0 0 0 3px rgba(75, 73, 172, 0.1);
+  background: white;
+}
+
+.custom-select .ng-option {
+  background: white;
+  padding: 8px 12px;
+  color: #2A2A2A;
+}
+
+.custom-select .ng-option:hover {
+  background: #4B49AC !important;
+  color: white !important;
+}
+
+.custom-select .ng-select-container {
+  border-radius: 15px !important;
+  padding: 0.5rem 0.5rem !important;
+  min-height: 38px !important;
+  border: 1px solid #9ca2a4 !important;
+  transition: all 0.3s ease !important;
+  font-size: 0.8rem !important;
+  color: #2A2A2A !important;
+}
+
+.custom-select.ng-select-focused .ng-select-container {
+  border-color: #4B49AC !important;
+  box-shadow: 0 0 0 0.2rem rgba(75, 73, 172, 0.25) !important;
+  outline: none !important;
+}
+
+/* buttons */
+.btn-form {
+  font-size: 0.85rem;
+}
+
+.btn-add {
+  background-color: #4B49AC;
+  border-color: #4B49AC;
+  color: white;
+  padding: 6px 12px;
+}
+
+.btn-add:disabled {
+  background-color: #6362ad;
+  color: white;
+}
+
+.btn-add:hover {
+  background-color: #2a299f;
+  color: white;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+  color: white;
+  padding: 6px 12px;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+  color: white;
+}

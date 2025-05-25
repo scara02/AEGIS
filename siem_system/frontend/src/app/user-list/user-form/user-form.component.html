@@ -1,0 +1,57 @@
+<div class="container-fluid p-2">
+  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+  <form [formGroup]="userForm" (ngSubmit)="onSave()" class="row g-3">
+    <div *ngFor="let field of formFields" class="col-md-6">
+      <label class="form-label d-flex justify-content-between align-items-center">
+        <span>{{ field.label }}</span>
+        <span *ngIf="!field.required" class="optional-text">Optional</span>
+      </label>
+      <input
+        *ngIf="field.type === 'text'"
+        type="text"
+        class="form-control form-input"
+        [formControlName]="field.key"
+        [ngClass]="{'is-invalid': userForm.get(field.key)?.touched && userForm.get(field.key)?.invalid}"
+      >
+      <ng-select
+        *ngIf="field.type === 'select'"
+        class="custom-select input"
+        [formControlName]="field.key"
+        [items]="field.options"
+        [ngClass]="{'is-invalid': userForm.get(field.key)?.touched && userForm.get(field.key)?.invalid}"
+        [placeholder]="'Select ' + field.label"
+        [searchable]="false"
+        [clearable]="false"
+      >
+      </ng-select>
+      <input
+        *ngIf="field.type === 'password'"
+        type="password"
+        class="form-control form-input"
+        [formControlName]="field.key"
+        [ngClass]="{'is-invalid': userForm.get(field.key)?.touched && userForm.get(field.key)?.invalid}"
+      >
+      <div *ngIf="getErrorMessage(field)" class="invalid-feedback">
+        {{ getErrorMessage(field) }}
+      </div>
+    </div>
+    <div class="col-md-6">
+      <label class="form-label d-flex justify-content-between align-items-center">
+        <span>Confirm Password</span>
+      </label>
+      <input
+        type="password"
+        class="form-control form-input"
+        formControlName="passwordConfirm"
+        [ngClass]="{'is-invalid': userForm.get('passwordConfirm')?.touched && (userForm.get('passwordConfirm')?.invalid || userForm.errors?.['mismatch'])}"
+      >
+      <div *ngIf="getErrorMessage({ key: 'passwordConfirm', label: 'Confirm Password' })" class="invalid-feedback">
+        {{ getErrorMessage({ key: 'passwordConfirm', label: 'Confirm Password' }) }}
+      </div>
+    </div>
+    <div class="col-12 d-flex gap-2 justify-content-end">
+      <button type="button" class="btn btn-form btn-secondary" (click)="onCancel()">Cancel</button>
+      <button type="submit" class="btn btn-form btn-add" [disabled]="userForm.invalid">Create User</button>
+    </div>
+  </form>
+</div>

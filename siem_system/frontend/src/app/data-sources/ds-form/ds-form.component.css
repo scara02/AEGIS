@@ -1,0 +1,82 @@
+@import "@ng-select/ng-select/themes/default.theme.css";
+
+.ds-form-popover {
+  width: 350px;
+  background: white;
+  padding: 1rem;
+  border: 1px solid #4B49AC;
+  box-shadow: 0 0 0 3px rgba(75, 73, 172, 0.1);
+  border-radius: 6px;
+  font-size: 0.8rem;
+}
+
+.form-control {
+  border-color: #4B49AC;
+  border-radius: 6px;
+  padding: 6px 12px;
+}
+
+.form-input {
+  border-radius: 15px;
+  border: 1px solid #9ca2a4;
+  padding: 0.5rem 1rem;
+  transition: all 0.3s ease;
+  font-size: 0.8rem;
+  color: #2A2A2A;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-input:focus {
+  border-color: #4B49AC;
+  box-shadow: 0 0 0 0.2rem rgba(75, 73, 172, 0.25);
+}
+
+.form-input.is-invalid {
+  border-color: #dc3545;
+}
+
+.invalid-feedback {
+  color: #dc3545;
+  font-size: 0.69rem;
+  margin-top: 0.25rem;
+}
+
+.optional-text {
+  font-size: 0.7rem;
+  color: #6c757d;
+  margin-left: 0.6rem;
+}
+
+.btn-form {
+  font-size: 0.85rem;
+}
+
+.btn-add {
+  background-color: #4B49AC;
+  border-color: #4B49AC;
+  color: white;
+  padding: 6px 12px;
+}
+
+.btn-add:disabled {
+  background-color: #6362ad;
+  color: white;
+}
+
+.btn-add:hover {
+  background-color: #2a299f;
+  color: white;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+  color: white;
+  padding: 6px 12px;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+  color: white;
+}

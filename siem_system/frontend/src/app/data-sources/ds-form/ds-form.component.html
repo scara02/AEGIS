@@ -1,0 +1,25 @@
+<div class="container-fluid p-2">
+  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+  <form [formGroup]="dsForm" (ngSubmit)="onSave()" class="row g-3">
+    <div *ngFor="let field of formFields" class="col-md-12">
+      <label class="form-label d-flex justify-content-between align-items-center">
+        <span>{{ field.label }}</span>
+        <span *ngIf="!field.required" class="optional-text">Optional</span>
+      </label>
+      <input
+        *ngIf="field.type === 'text'"
+        type="text"
+        class="form-control form-input"
+        [formControlName]="field.key"
+        [ngClass]="{'is-invalid': dsForm.get(field.key)?.touched && dsForm.get(field.key)?.invalid}"
+      >
+      <div *ngIf="getErrorMessage(field)" class="invalid-feedback">
+        {{ getErrorMessage(field) }}
+      </div>
+    </div>
+    <div class="col-12 d-flex gap-2 justify-content-end">
+      <button type="button" class="btn btn-form btn-secondary" (click)="onCancel()">Cancel</button>
+      <button type="submit" class="btn btn-form btn-add" [disabled]="dsForm.invalid">Create Data Source</button>
+    </div>
+  </form>
+</div>

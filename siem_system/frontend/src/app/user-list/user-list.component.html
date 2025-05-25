@@ -1,0 +1,226 @@
+<div class="container-fluid px-4">
+  <div class="d-flex justify-content-between align-items-center my-4 position-relative">
+    <div class="container-fluid d-flex flex-row gap-3">
+      <!-- add button -->
+      <button class="btn btn-new" (click)="toggleUserForm()" title="Add user">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" viewBox="0 0 24 24">
+          <path d="M12 5v14M5 12h14" stroke="white" stroke-width="2" stroke-linecap="round" />
+        </svg>
+      </button>
+
+      <!-- toggle sort button -->
+      <button class="btn btn-sort shadow-sm d-flex align-items-center"
+              (click)="toggleSorting()"
+              title="{{ sortingEnabled ? 'Disable sorting' : 'Enable sorting' }}"
+              [class.btn-disabled]="!sortingEnabled">
+        <svg width="20" height="20" viewBox="0 0 32 32" fill="white" xmlns="http://www.w3.org/2000/svg">
+          <g>
+            <polyline points="25,25 21,29 17,25" fill="white" stroke="white"/>
+            <line x1="21" y1="29" x2="21" y2="7" fill="white" stroke="white"/>
+            <polyline points="15,7 11,3 7,7" fill="white" stroke="white"/>
+            <line x1="11" y1="3" x2="11" y2="25" fill="white" stroke="white"/>
+          </g>
+        </svg>
+      </button>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+      <!-- search -->
+      <div class="search-container me-4">
+        <div class="input-group input-group-sm">
+          <input type="text"
+                 class="form-control"
+                 placeholder="Search users..."
+                 [(ngModel)]="searchQuery"
+                 (input)="onSearchInput()">
+          <button class="btn btn-outline-secondary d-flex align-items-center"
+                  type="button"
+                  (click)="onSearch()">
+            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path class="search-icon-glass" d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3C5.91 3 3 5.91 3 9.5C3 13.09 5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14Z" fill="currentColor"/>
+              <path class="search-icon-arrow" d="M12 10H10V12H12V10Z" fill="currentColor"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- refresh button -->
+      <button class="btn btn-refresh shadow-sm d-flex align-items-center"
+              (click)="fetchUsers()"
+              title="Refresh users"
+              [disabled]="isRefreshing">
+        <svg class="refresh-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4C7.58 4 4 7.58 4 12C4 16.42 7.58 20 12 20C15.73 20 18.84 17.45 19.73 14H17.65C16.83 16.33 14.61 18 12 18C8.69 18 6 15.31 6 12C6 8.69 8.69 6 12 6C13.66 6 15.14 6.69 16.22 7.78L13 11H20V4L17.65 6.35Z"
+                fill="#4B49AC"/>
+        </svg>
+      </button>
+    </div>
+
+    <app-user-form
+      *ngIf="showUserForm"
+      class="user-form-popover"
+      (save)="saveNewUser($event)"
+      (cancel)="cancelAdd()"
+    ></app-user-form>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead class="table-purple">
+            <tr>
+              <th *ngFor="let col of columns" [className]="col" (click)="sortingEnabled && setSort(col)" [style.cursor]="sortingEnabled ? 'pointer' : 'default'">
+                <div class="header-content">
+                  <span>{{ col | titlecase }}</span>
+                  <span class="sort-icon" *ngIf="sortingEnabled">
+                    <!-- unsorted -->
+                    <svg *ngIf="sortField !== col"
+                         width="15"
+                         height="15"
+                         viewBox="0 0 32 32"
+                         fill="black"
+                         stroke="black"
+                         class="sort-icon-unsorted">
+                      <g>
+                        <polyline points="25,25 21,29 17,25" fill="black" stroke="black"/>
+                        <line x1="21" y1="29" x2="21" y2="7" fill="black" stroke="black"/>
+                        <polyline points="15,7 11,3 7,7" fill="black" stroke="black"/>
+                        <line x1="11" y1="3" x2="11" y2="25" fill="black" stroke="black"/>
+                      </g>
+                    </svg>
+                    <!-- asc sort -->
+                    <svg *ngIf="sortField === col && sortDirection === 'asc'"
+                         width="15"
+                         height="15"
+                         viewBox="0 0 32 32"
+                         fill="black"
+                         stroke="black"
+                         class="sort-icon-asc">
+                      <g>
+                        <polyline points="15,7 11,3 7,7" fill="black" stroke="black"/>
+                        <line x1="11" y1="3" x2="11" y2="25" fill="black" stroke="black"/>
+                      </g>
+                    </svg>
+                    <!-- desc sort -->
+                    <svg *ngIf="sortField === col && sortDirection === 'desc'"
+                         width="15"
+                         height="15"
+                         viewBox="0 0 32 32"
+                         fill="black"
+                         stroke="black"
+                         class="sort-icon-desc">
+                      <g>
+                        <polyline points="7,25 11,29 15,25" fill="black" stroke="black"/>
+                        <line x1="11" y1="3" x2="11" y2="25" fill="black" stroke="black"/>
+                      </g>
+                    </svg>
+                  </span>
+                </div>
+              </th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngIf="users.length > 0; else noUsersTemplate">
+              <tr *ngFor="let user of users">
+                <td *ngFor="let col of columns">
+                  <ng-container *ngIf="editingUserId === user.id && isEditable(col); else displayCell">
+                    <ng-container *ngFor="let field of formFields">
+                      <ng-container *ngIf="field.key === col">
+                        <input *ngIf="field.type === 'text'"
+                               type="text"
+                               class="form-control form-control-sm"
+                               [(ngModel)]="currentUser[field.key]"
+                               [required]="field.required">
+                        <select *ngIf="field.type === 'select'"
+                                class="form-select form-select-sm"
+                                [(ngModel)]="currentUser[field.key]"
+                                [required]="field.required">
+                          <option *ngFor="let option of field.options" [value]="option">{{ option }}</option>
+                        </select>
+                      </ng-container>
+                    </ng-container>
+                  </ng-container>
+                  <ng-template #displayCell>
+                    {{ user[col] }}
+                  </ng-template>
+                </td>
+                <td>
+                  <div class="d-flex gap-2">
+                    <ng-container *ngIf="editingUserId === user.id; else editButtons">
+                      <button class="btn btn-action" (click)="saveUser()">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M9 16.17L4.83 12L3.41 13.41L9 19L21 7L19.59 5.59L9 16.17Z" fill="#28a745"/>
+                        </svg>
+                      </button>
+                      <button class="btn btn-action" (click)="cancelEdit()">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M18 6L6 18M6 6L18 18" stroke="#6c757d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </button>
+                    </ng-container>
+                    <ng-template #editButtons>
+                      <button class="btn btn-action" (click)="startEdit(user)">
+                        <img src="edit.png" class="action-icon">
+                      </button>
+                      <button class="btn btn-action" (click)="confirmDelete(user)">
+                        <img src="delete.png" class="action-icon">
+                      </button>
+                      <button class="btn btn-action" (click)="startPasswordChange(user)">
+                        <img src="heart-lock.png" class="action-icon">
+                      </button>
+                    </ng-template>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+            <ng-template #noUsersTemplate>
+              <tr class="no-users-row">
+                <td [attr.colspan]="columns.length + 1" class="text-center">
+                  <div class="d-flex flex-column align-items-center justify-content-center p-2">
+                    <span class="text-muted">No users found...</span>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="custom-paginator mt-2">
+    <div class="page-navigation">
+      <div class="page-range-label">Rows per page:</div>
+      <select class="mat-select" [(ngModel)]="limit" (change)="onLimitChange(limit)">
+        <option *ngFor="let opt of [10, 20, 50, 100]" [value]="opt">{{ opt }}</option>
+      </select>
+      <div class="page-info">{{ (page - 1) * limit + 1 }} – {{ page * limit > total ? total : page * limit }} of {{ total }}</div>
+      <button mat-icon-button
+              class="nav-button"
+              [disabled]="page === 1"
+              (click)="onPageChange(page - 1)">
+        ❮
+      </button>
+      <button mat-icon-button
+              class="nav-button"
+              [disabled]="users.length < limit || (page * limit >= total)"
+              (click)="onPageChange(page + 1)">
+        ❯
+      </button>
+    </div>
+  </div>
+
+  <app-user-password-modal
+    *ngIf="showPasswordModal"
+    [userId]="currentUser.id"
+    (closed)="showPasswordModal = false"
+    (passwordUpdated)="onPasswordUpdated()">
+  </app-user-password-modal>
+
+  <div *ngIf="showAlert" class="alert alert-info"
+       [class.alert-success]="alertType === 'success'"
+       [class.alert-danger]="alertType === 'error'">
+    {{ alertMessage }}
+  </div>
+</div>

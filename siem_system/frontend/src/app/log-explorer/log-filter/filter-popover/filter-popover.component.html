@@ -1,0 +1,108 @@
+<div class="filter-popover">
+  <form [formGroup]="filterForm">
+    <div class="filter-field">
+      <label>Field</label>
+      <ng-select
+        formControlName="field"
+        [items]="availableFields"
+        bindLabel="name"
+        bindValue="name"
+        placeholder="Select field"
+        (change)="onFieldChange()"
+        [searchable]="true"
+        class="custom-select"
+      >
+      </ng-select>
+    </div>
+
+    <div class="filter-operator mt-2">
+      <label>Operator</label>
+      <ng-select
+        [items]="operators"
+        bindLabel="name"
+        bindValue="value"
+        placeholder="Select operator"
+        formControlName="operator"
+        class="custom-select"
+      >
+      </ng-select>
+    </div>
+
+    <ng-container *ngIf="currentOperator">
+      <!-- value input -->
+      <div class="filter-value mt-2" *ngIf="!isRangeOperator() && currentOperator !== 'exists' && currentOperator !== 'nexists'">
+        <!-- multiselect for in/nin operators -->
+        <ng-select *ngIf="['in', 'nin'].includes(currentOperator)"
+          [items]="availableValues" [addTag]="true"
+          bindLabel="toString()"
+          placeholder="Select values"
+          formControlName="value"
+          [multiple]="true"
+          [closeOnSelect]="false"
+          [searchable]="true"
+          class="custom-select"
+        >
+        </ng-select>
+
+        <!-- single select for other operators with availble values -->
+        <ng-select *ngIf="!['in', 'nin'].includes(currentOperator) && availableValues.length > 0"
+          [items]="availableValues" [addTag]="true"
+          bindLabel="toString()"
+          placeholder="Select value"
+          formControlName="value"
+          class="custom-select"
+        >
+        </ng-select>
+
+        <!-- text input when no values -->
+        <input *ngIf="!['in', 'nin'].includes(currentOperator) && availableValues.length === 0"
+          type="text"
+          class="form-control"
+          formControlName="value"
+          [placeholder]="getValuePlaceholder()">
+      </div>
+
+      <!-- input for range operator -->
+      <div class="filter-range mt-2" *ngIf="isRangeOperator()">
+        <div class="row">
+          <div class="col">
+            <ng-select *ngIf="availableValues.length > 0"
+                      [items]="availableValues"
+                      bindLabel="toString()"
+                      placeholder="From"
+                      formControlName="valueFrom"
+                      class="custom-select">
+            </ng-select>
+            <input *ngIf="availableValues.length === 0"
+                  type="text"
+                  class="form-control"
+                  formControlName="valueFrom"
+                  placeholder="From">
+          </div>
+          <div class="col">
+            <ng-select *ngIf="availableValues.length > 0"
+                      [items]="availableValues"
+                      bindLabel="toString()"
+                      placeholder="To"
+                      formControlName="valueTo"
+                      class="custom-select">
+            </ng-select>
+            <input *ngIf="availableValues.length === 0"
+                  type="text"
+                  class="form-control"
+                  formControlName="valueTo"
+                  placeholder="To">
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <button
+      class="btn btn-apply-filter mt-3 w-100"
+      (click)="applyFilter(); $event.stopPropagation()"
+      [disabled]="!filterForm.valid"
+    >
+      Apply Filter
+    </button>
+  </form>
+</div>

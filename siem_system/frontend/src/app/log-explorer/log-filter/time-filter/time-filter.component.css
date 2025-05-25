@@ -1,0 +1,115 @@
+.time-filter-trigger {
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.time-filter-icon {
+  border-right: 1px solid #4B49AC !important;
+  padding: 5px 12px 5px 5px;
+  margin-right: 5px;
+}
+
+.time-text {
+  font-size: 0.9rem;
+}
+
+.filter-icon {
+  width: 20px;
+  height: 20px;
+  filter: invert(35%) sepia(52%) saturate(715%) hue-rotate(213deg) brightness(93%) contrast(91%);
+}
+
+.arrow-separator {
+  width: 16px;
+  height: 16px;
+  color: #4B49AC;
+}
+
+/* popover */
+.filter-time-popover {
+  width: 350px;
+  border: 1px solid #4B49AC;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(75, 73, 172, 0.15);
+}
+
+.filter-time-popover .arrow::before {
+  border-bottom-color: #4B49AC !important;
+}
+
+/* form */
+.form-control {
+  border-color: #4B49AC;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 0.875rem;
+}
+
+.form-control:focus {
+  border-color: #2a299f;
+  box-shadow: 0 0 0 3px rgba(75, 73, 172, 0.1);
+}
+
+.custom-time-select .ng-select-container {
+  border-color: #4B49AC;
+  border-radius: 6px;
+  min-height: 38px;
+  background: white;
+  align-items: center;
+  min-width: 80px !important;
+  border: none !important;
+}
+
+.custom-time-select .ng-dropdown-panel {
+  border: 1px solid #4B49AC;
+  box-shadow: 0 0 0 3px rgba(75, 73, 172, 0.1);
+  background: white;
+}
+
+.custom-time-select .ng-option {
+  background: white;
+  padding: 6px;
+  color: #2A2A2A;
+}
+
+.custom-time-select .ng-option:hover {
+  background: #4B49AC !important;
+  color: white !important;
+}
+
+/* buttons */
+.btn-primary {
+  background-color: #4B49AC;
+  border-color: #4B49AC;
+  padding: 4px 12px;
+}
+
+.btn-primary:hover {
+  background-color: #2a299f;
+  border-color: #2a299f;
+}
+
+.commonly-used {
+  font-size: 0.8rem;
+}
+
+.commonly-used:hover {
+  background-color: rgba(75, 73, 172, 0.1);
+  cursor: pointer;
+}
+
+
+.icon-arrow {
+  width: 9px;
+  height: 9px;
+  transition: transform 0.2s ease;
+}
+
+.rotated {
+  transform: rotate(90deg);
+}
+
+.filter-popover {
+  cursor: default;
+}
+

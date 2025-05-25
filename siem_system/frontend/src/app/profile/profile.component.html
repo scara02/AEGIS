@@ -1,0 +1,181 @@
+<div class="profile-main d-flex justify-content-center">
+  <div class="card mt-3">
+    <div class="card-header">
+      <div class="row align-items-center p-3">
+        <div class="col-6 text-center">
+          <h3 class="profile">Profile</h3>
+        </div>
+        <div class="col-6 text-center">
+          <div class="d-flex flex-column">
+            <span class="text-muted small">username</span>
+            <span class="small">{{ user.username }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <form (ngSubmit)="updateProfile()">
+        <!-- details section -->
+        <div class="row">
+          <div class="col-md-6 p-4">
+            <h5 class="text">Details</h5>
+            <p class="text-muted small">
+              Provide basic information about yourself for better identification
+            </p>
+          </div>
+          <div class="col-md-6 p-4">
+            <div class="mb-3">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <label class="text fw-semibold">Full Name</label>
+                <span class="text-muted">Optional</span>
+              </div>
+              <input type="text" class="form-control"
+                     [(ngModel)]="user.full_name" name="fullName"
+                     (input)="checkForChanges()">
+            </div>
+            <div class="mb-0">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <label class="text fw-semibold">Email</label>
+                <span class="text-muted">Optional</span>
+              </div>
+              <input type="email" class="form-control"
+                     [(ngModel)]="user.email" name="email"
+                     (input)="checkForChanges()">
+            </div>
+          </div>
+        </div>
+
+        <!-- avatar section -->
+        <div class="row">
+          <div class="col-md-6 p-4">
+            <h5 class="text fw-semibold">Avatar</h5>
+            <p class="text-muted small">
+              Choose between automatic initials or a custom profile image
+            </p>
+          </div>
+          <div class="col-md-6 p-4" style="max-width: 360px;">
+            <div class="mb-2">
+              <label class="form-label text fw-semibold">Profile Picture</label>
+              <div class="d-flex align-items-center gap-3">
+                <div class="avatar-preview" [ngSwitch]="avatarType">
+                  <div *ngSwitchCase="'initials'" class="avatar-preview"
+                       [style.background]="user.avatar_color"
+                       [style.color]="textColor">
+                    {{ user.initials }}
+                  </div>
+                  <img *ngSwitchCase="'image'"
+                       [src]="user.avatar"
+                       class="avatar-image"
+                       alt="Profile picture">
+                </div>
+                <div class="flex-grow-1">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio"
+                           [(ngModel)]="avatarType" value="initials"
+                           name="avatarType" id="avatarInitials"
+                    (ngModelChange)="checkForChanges()">
+                    <label class="form-check-label" for="avatarInitials">
+                        Use Initials
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio"
+                           [(ngModel)]="avatarType" value="image"
+                           name="avatarType" id="avatarImage"
+                    (ngModelChange)="checkForChanges()">
+                    <label class="form-check-label" for="avatarImage">
+                      Upload Image
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- initials & color picker -->
+            <div *ngIf="avatarType === 'initials'">
+              <div class="row g-3 initials-color-picker">
+                <div class="col-3">
+                  <label class="form-label text fw-semibold">Initials</label>
+                  <input type="text" class="form-control"
+                         [(ngModel)]="user.initials" name="initials"
+                         maxlength="2"
+                         (input)="updateInitials(); checkForChanges()">
+                </div>
+                <div class="col-9">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <label class="form-label text fw-semibold m-0">Color</label>
+                    <a href="javascript:void(0)"
+                       class="small text-decoration-none"
+                       (click)="randomizeColor()">
+                      Random
+                    </a>
+                  </div>
+                  <div class="input-group">
+                    <input type="color" class="form-control form-control-color"
+                           [(ngModel)]="user.avatar_color" name="avatarColor"
+                           (input)="updateTextColor(); checkForChanges()">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- image upload -->
+            <div *ngIf="avatarType === 'image'" class="my-3">
+              <input type="file" class="form-control custom-file-input"
+                     (change)="handleFileInput($event)" accept="image/*"
+                     (input)="checkForChanges()">
+            </div>
+          </div>
+        </div>
+
+        <!-- submit button -->
+        <div class="row">
+          <div class="col-md-6 p-4">
+            <h5 class="text fw-semibold">Save Changes</h5>
+            <p class="text-muted small">
+              Click on button to save your changes
+            </p>
+          </div>
+          <div class="col-md-6 p-4">
+            <div class="mb-2">
+              <button type="submit" class="btn btn-apply px-3" [disabled]="!hasChanges">
+                Save Changes
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <!-- password section -->
+        <div class="row">
+          <div class="col-md-6 p-4">
+            <h5 class="text fw-semibold">Password</h5>
+            <p class="text-muted small">
+              Update your account password securely
+            </p>
+          </div>
+          <div class="col-md-6 p-4">
+            <p class="fw-semibold m-1">Password</p>
+            <button class="btn btn-soft-primary mb-3"
+                    (click)="showPasswordModal = true">
+              <img src="heart-lock.png" class="psswd-icon">
+              Change Password
+            </button>
+          </div>
+        </div>
+
+        <app-password-modal
+          *ngIf="showPasswordModal"
+          (closed)="showPasswordModal = false"
+          (passwordUpdated)="onPasswordUpdated()">
+        </app-password-modal>
+    </div>
+  </div>
+</div>
+
+<!-- success message -->
+<div *ngIf="showSuccessMessage" class="alert alert-success alert-dismissible fade show position-fixed bottom-0 end-0 m-3">
+  <i class="fas fa-check-circle me-2"></i>
+  {{ successMessage }}
+</div>

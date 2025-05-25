@@ -1,0 +1,9 @@
+<div class="layout">
+  <app-header *ngIf="showHeaderFooter"></app-header>
+  <div class="body-wrapper">
+    <app-sidebar *ngIf="showHeaderFooter"></app-sidebar>
+    <main>
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

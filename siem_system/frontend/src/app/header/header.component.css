@@ -1,0 +1,104 @@
+.top-nav {
+  background: white;
+  height: 50px;
+  box-shadow: 0px 14px 12px 0px rgba(231, 231, 231, 0.7);
+  position: sticky;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  padding: 6px 12px;
+}
+
+.logo {
+  margin-right: 8px;
+}
+
+.b-name {
+  margin: 0;
+  color: #4B49AC;
+  font-size: 18pt;
+  font-weight: 500;
+  cursor: default;
+}
+
+/* health indicators */
+.health-status {
+  display: flex;
+  gap: 20px;
+  margin-right: auto;
+  margin-left: 40px;
+}
+
+.status-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.db-logo {
+  width: 26px;
+  height: 26px;
+}
+
+.status-circle {
+  position: absolute;
+  right: -5px;
+  left: auto;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.healthy {
+  background-color: #2e7d32;
+}
+
+.unhealthy {
+  background-color: #c62828;
+}
+
+.db-logo {
+  width: 30px;
+  height: 30px;
+  color: #718096;
+}
+
+/* profile pic */
+.profile-icon-container {
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.profile-icon-container:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.initials-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  font-size: 0.76rem;
+}
+
+.profile-image {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+}
