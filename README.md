@@ -1,4 +1,9 @@
 # AEGIS SIEM System
+
+
+> English | [Kazakh](https://github.com/scara02/AEGIS/blob/main/README.kz.md) | [Russian](https://github.com/scara02/AEGIS/blob/main/README.ru.md)
+
+
 **AEGIS** is a modular Security Information and Event Management (SIEM) system designed for collecting, storing, and analyzing security logs in real-time. It supports anomaly detection and automated alerting via Telegram, leveraging modern tools like Docker, InfluxDB, PostgreSQL, and Python-based services.
 
 ## Features

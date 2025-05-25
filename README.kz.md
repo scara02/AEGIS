@@ -1,5 +1,9 @@
 # AEGIS SIEM жүйесі
 
+
+> [English](https://github.com/scara02/AEGIS/blob/main/README.md) | Kazakh | [Russian](https://github.com/scara02/AEGIS/blob/main/README.ru.md)
+
+
 **AEGIS** — бұл қауіпсіздік журналдарын нақты уақытта жинауға, сақтауға және талдауға арналған модульдік Қауіпсіздік Ақпараттары және Оқиғаларды Басқару (SIEM) жүйесі. Жүйе аномалияларды анықтау мен Telegram арқылы автоматтандырылған хабарламаларды жіберуді қолдайды және заманауи құралдарды (Docker, InfluxDB, PostgreSQL, Python негізіндегі қызметтер) пайдаланады.
 
 ## Ерекшеліктері
