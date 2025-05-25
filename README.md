@@ -117,3 +117,15 @@ To change ports, edit the `docker-compose.yml` file.
 
 ### Support
 For issues, questions, or suggestions, open an issue on the GitHub repository.
+
+### Open-Source Tools and Licenses
+
+This project uses the following open-source tools:
+
+- **FastAPI** – MIT License
+- **PostgreSQL** – PostgreSQL License
+- **InfluxDB** – MIT License
+- **Docker & Docker Compose** – Apache License 2.0
+- **Python** – Python Software Foundation License
+
+We respect and comply with all associated licenses.
