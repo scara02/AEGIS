@@ -91,9 +91,9 @@ docker-compose up -d --build
 ```
 This will:
 
-Build and start the FastAPI backend service
-Launch the anomaly detector service
-Start PostgreSQL and InfluxDB containers
+* Build and start the FastAPI backend service
+* Launch the anomaly detector service
+* Start PostgreSQL and InfluxDB containers
 
 ### 6. Access and Usage
 Access the system via the following endpoints:
