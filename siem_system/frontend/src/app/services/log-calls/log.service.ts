@@ -10,7 +10,7 @@ interface ApiResponse {
   providedIn: 'root'
 })
 export class LogService {
-  private baseUrl = 'http://127.0.0.1:8000/api';
+  private baseUrl = '/api';
 
   constructor(private http: HttpClient) {
   }

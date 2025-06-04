@@ -10,7 +10,7 @@ interface HealthStatus {
 
 @Injectable({ providedIn: 'root' })
 export class HealthService {
-  private apiUrl = 'http://127.0.0.1:8000/api/health';
+  private apiUrl = '/api/health';
 
   constructor(private http: HttpClient) {}
 

@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class DataSourceService {
-  private apiUrl = 'http://127.0.0.1:8000/api/datasources';
+  private apiUrl = '/api/datasources';
 
   constructor(private http: HttpClient) {}
 

@@ -10,10 +10,7 @@ from api.routes.alerts import router as alerts_router
 
 app = FastAPI(title="SIEM Platform")
 
-origins = [
-    "http://localhost:4200",
-    "http://127.0.0.1:4200",
-]
+origins = [ "*" ]
 
 app.add_middleware(
     CORSMiddleware,

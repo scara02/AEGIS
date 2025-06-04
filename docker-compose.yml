@@ -28,11 +28,20 @@ services:
   frontend:
     build:
       context: ./siem_system/frontend
-    ports:
-      - "4200:80"
     networks:
       - siem-network
 
+  reverse-proxy:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./reverse-proxy.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - siem-network
   anomaly-detection:
     build: ./anomaly-detector
     ports:

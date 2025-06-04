@@ -8,7 +8,7 @@ import { Alert } from '../../models/alert.model';
   providedIn: 'root'
 })
 export class AlertService {
-  private apiUrl = 'http://127.0.0.1:8000/api/alerts';
+  private apiUrl = '/api/alerts';
 
   constructor(private http: HttpClient) {}
 
