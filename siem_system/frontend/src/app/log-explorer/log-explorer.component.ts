@@ -111,6 +111,25 @@ export class LogExplorerComponent implements OnInit {
       });
   }
 
+  refreshLogs(): void {
+    if (this.fixedTimeFilter) {
+      const now = new Date();
+      const timeRangeDuration = new Date(this.fixedTimeFilter.valueTo).getTime() - new Date(this.fixedTimeFilter.valueFrom).getTime();
+      this.fixedTimeFilter = {
+        field: 'timestamp',
+        operator: 'between',
+        valueFrom: new Date(now.getTime() - timeRangeDuration).toISOString(),
+        valueTo: now.toISOString(),
+      };
+    } else {
+      this.setInitialTimeFilter();
+    }
+
+    this.page = 1;
+
+    this.fetchLogs();
+  }
+
   onMeasurementChange(): void {
     this.page = 1;
     this.fetchLogs();
